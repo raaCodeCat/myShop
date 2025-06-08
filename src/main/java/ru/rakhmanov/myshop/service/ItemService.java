@@ -11,4 +11,6 @@ public interface ItemService {
 
     Integer getItemsCount(String search);
 
+    Item getItemById(Long id);
+
 }

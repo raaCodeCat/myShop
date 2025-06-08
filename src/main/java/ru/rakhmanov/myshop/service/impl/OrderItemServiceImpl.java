@@ -2,15 +2,18 @@ package ru.rakhmanov.myshop.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.rakhmanov.myshop.dto.entity.Item;
 import ru.rakhmanov.myshop.dto.entity.Order;
 import ru.rakhmanov.myshop.dto.entity.OrderItem;
 import ru.rakhmanov.myshop.repository.OrderItemRepository;
+import ru.rakhmanov.myshop.service.ItemService;
 import ru.rakhmanov.myshop.service.OrderItemService;
 import ru.rakhmanov.myshop.service.OrderService;
 import ru.rakhmanov.myshop.utils.RequestHeaderUtil;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,6 +22,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     private final OrderItemRepository orderItemRepository;
     private final OrderService orderService;
+    private final ItemService itemService;
 
     @Override
     public Map<Long, Integer> getItemsIdWithCountInCartByIds(List<Long> itemIds) {
@@ -32,5 +36,53 @@ public class OrderItemServiceImpl implements OrderItemService {
                         OrderItem::getCount,
                         (existing, replacement) -> replacement
                 ));
+    }
+
+    @Override
+    public void editItemInCurrentOrder(Long itemId, String action) {
+        Long clientId = RequestHeaderUtil.getClientId();
+        Order order = orderService.getCurrentOrderByClientId(clientId);
+
+        switch (action) {
+            case "plus" -> incrementItemCountInOrder(itemId, order);
+            case "minus" -> decrementItemCountInOrder(itemId, order);
+            case "delete" -> deleteItemFromOrder(itemId, order);
+        }
+    }
+
+    private void incrementItemCountInOrder(Long itemId, Order order) {
+        Optional<OrderItem> optionalOrderItem = orderItemRepository.getOrderItemByOrderIdAndItemId(order.getId(), itemId);
+        OrderItem orderItem;
+
+        if (optionalOrderItem.isPresent()) {
+            orderItem = optionalOrderItem.get();
+            orderItem.setCount(orderItem.getCount() + 1);
+        } else {
+            Item item = itemService.getItemById(itemId);
+            orderItem = new OrderItem(order, item);
+        }
+
+        orderItemRepository.save(orderItem);
+    }
+
+    private void decrementItemCountInOrder(Long itemId, Order order) {
+        Optional<OrderItem> optionalOrderItem = orderItemRepository.getOrderItemByOrderIdAndItemId(order.getId(), itemId);
+
+        if (optionalOrderItem.isPresent()) {
+            OrderItem orderItem = optionalOrderItem.get();
+            Integer count = orderItem.getCount();
+
+            if (count > 1) {
+                orderItem.setCount(orderItem.getCount() - 1);
+                orderItemRepository.save(orderItem);
+            } else {
+                orderItemRepository.delete(orderItem);
+            }
+        }
+    }
+
+    private void deleteItemFromOrder(Long itemId, Order order) {
+        Optional<OrderItem> optionalOrderItem = orderItemRepository.getOrderItemByOrderIdAndItemId(order.getId(), itemId);
+        optionalOrderItem.ifPresent(orderItemRepository::delete);
     }
 }

@@ -7,4 +7,6 @@ public interface OrderItemService {
 
     Map<Long, Integer> getItemsIdWithCountInCartByIds(List<Long> itemIds);
 
+    void editItemInCurrentOrder(Long itemId, String action);
+
 }

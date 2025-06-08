@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.rakhmanov.myshop.dto.SortTypeEnum;
 import ru.rakhmanov.myshop.dto.entity.Item;
+import ru.rakhmanov.myshop.exeption.NotFoundException;
 import ru.rakhmanov.myshop.repository.ItemRepository;
 import ru.rakhmanov.myshop.service.ItemService;
 
@@ -37,6 +38,11 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Integer getItemsCount(String search) {
         return itemRepository.countItemsByNameLikeIgnoreCase(makeSearchString(search));
+    }
+
+    @Override
+    public Item getItemById(Long id) {
+        return itemRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     private String makeSearchString(String search) {

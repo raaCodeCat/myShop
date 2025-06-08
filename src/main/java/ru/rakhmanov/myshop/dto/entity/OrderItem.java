@@ -9,11 +9,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "orderitems")
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderItem {
 
     @Id
@@ -30,5 +34,11 @@ public class OrderItem {
 
     @Column(name = "count", nullable = false)
     private Integer count;
+
+    public OrderItem(Order order, Item item) {
+        this.order = order;
+        this.item = item;
+        this.count = 1;
+    }
 
 }

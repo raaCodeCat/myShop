@@ -50,6 +50,11 @@ public class OrderItemServiceImpl implements OrderItemService {
         }
     }
 
+    @Override
+    public List<OrderItem> getOrderItemsByOrderId(Long orderId) {
+        return orderItemRepository.getOrderItemByOrderId(orderId);
+    }
+
     private void incrementItemCountInOrder(Long itemId, Order order) {
         Optional<OrderItem> optionalOrderItem = orderItemRepository.getOrderItemByOrderIdAndItemId(order.getId(), itemId);
         OrderItem orderItem;

@@ -6,3 +6,6 @@ spring:
     name: myShop
   profiles:
     active: dev
+  web:
+    resources:
+      static-locations: classpath:/static/

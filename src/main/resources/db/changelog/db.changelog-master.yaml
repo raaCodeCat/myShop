@@ -1,3 +1,5 @@
 databaseChangeLog:
   - include:
       file: db/changelog/scripts/20250603_0001_init.sql
+  - include:
+      file: db/changelog/scripts/20250608_0002_insert_items.sql

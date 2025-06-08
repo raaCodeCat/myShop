@@ -1,4 +1,4 @@
-package ru.rakhmanov.myshop.entity;
+package ru.rakhmanov.myshop.dto.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

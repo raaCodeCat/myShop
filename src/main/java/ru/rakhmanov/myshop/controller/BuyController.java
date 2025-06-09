@@ -19,7 +19,7 @@ public class BuyController {
     public String buy() {
         Optional<Long> optOrderId = orderService.getCurrentOrderId();
 
-        return optOrderId.map(aLong -> String.format("/orders/%d?newOrder=true", aLong)).orElse("error");
+        return optOrderId.map(aLong -> String.format("redirect:/orders/%d?newOrder=true", aLong)).orElse("error");
     }
 
 }

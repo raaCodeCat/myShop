@@ -47,7 +47,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item getItemById(Long id) {
-        return itemRepository.findById(id).orElseThrow(NotFoundException::new);
+        return itemRepository.findById(id).orElseThrow(() -> new NotFoundException("Товар не найден"));
     }
 
     @Override
@@ -60,7 +60,7 @@ public class ItemServiceImpl implements ItemService {
                 .filter(oi -> itemId.equals(oi.getItem().getId()))
                 .findFirst()
                 .map(OrderItem::getItem)
-                .orElse(this.getItemById(itemId));
+                .orElse(getItemById(itemId));
 
         Integer count = orderItems.stream()
                 .filter(oi -> itemId.equals(oi.getItem().getId()))

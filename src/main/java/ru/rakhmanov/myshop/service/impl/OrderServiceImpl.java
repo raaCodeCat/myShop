@@ -52,7 +52,7 @@ public class OrderServiceImpl implements OrderService {
         List<OrderItem> orderItems = orderItemRepository.getOrderItemsByOrderIdFull(id);
         Order order = orderItems.stream()
                 .findFirst()
-                .map(OrderItem::getOrder).orElseThrow(NotFoundException::new);
+                .map(OrderItem::getOrder).orElseThrow(() -> new NotFoundException("Заказ не найден"));
 
 
         return orderMapper.mapToOrderDto(order.getId(), orderItems);
@@ -60,7 +60,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void buyOrder(Long orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(NotFoundException::new);
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("Заказ не найден"));
         order.setIsPaid(true);
         orderRepository.save(order);
     }

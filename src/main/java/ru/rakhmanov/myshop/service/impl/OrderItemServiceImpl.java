@@ -5,7 +5,10 @@ import org.springframework.stereotype.Service;
 import ru.rakhmanov.myshop.dto.entity.Item;
 import ru.rakhmanov.myshop.dto.entity.Order;
 import ru.rakhmanov.myshop.dto.entity.OrderItem;
+import ru.rakhmanov.myshop.exeption.NotFoundException;
+import ru.rakhmanov.myshop.repository.ItemRepository;
 import ru.rakhmanov.myshop.repository.OrderItemRepository;
+import ru.rakhmanov.myshop.repository.OrderRepository;
 import ru.rakhmanov.myshop.service.OrderItemService;
 import ru.rakhmanov.myshop.service.OrderService;
 import ru.rakhmanov.myshop.utils.RequestHeaderUtil;
@@ -20,6 +23,7 @@ import java.util.stream.Collectors;
 public class OrderItemServiceImpl implements OrderItemService {
 
     private final OrderItemRepository orderItemRepository;
+    private final ItemRepository itemRepository;
     private final OrderService orderService;
 
     @Override
@@ -61,7 +65,7 @@ public class OrderItemServiceImpl implements OrderItemService {
             orderItem = optionalOrderItem.get();
             orderItem.setCount(orderItem.getCount() + 1);
         } else {
-            Item item = new Item(itemId);
+            Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Товар не найден"));
             orderItem = new OrderItem(order, item);
         }
 

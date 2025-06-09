@@ -14,6 +14,7 @@ import java.util.List;
 public interface OrderMapper {
 
     @Mapping(target = "items", source = "orderItems")
+    @Mapping(target = "totalSum", ignore = true)
     OrderDto mapToOrderDto(Long id, List<OrderItem> orderItems);
 
     @AfterMapping

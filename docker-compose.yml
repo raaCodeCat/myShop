@@ -1,0 +1,27 @@
+version: '3.1'
+services:
+  myshop-service:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: myshop-service
+    ports:
+      - "8090:8090"
+    depends_on:
+      myshop-db:
+        condition: service_healthy
+
+  myshop-db:
+    image: postgres:16-alpine
+    container_name: myshop-db
+    ports:
+      - "5435:5432"
+    environment:
+      - POSTGRES_DB=myShop
+      - POSTGRES_USER=shopUser
+      - POSTGRES_PASSWORD=f#57Hx9jz
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U shopUser -d myShop" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5

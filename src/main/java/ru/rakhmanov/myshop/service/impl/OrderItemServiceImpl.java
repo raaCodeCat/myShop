@@ -6,7 +6,6 @@ import ru.rakhmanov.myshop.dto.entity.Item;
 import ru.rakhmanov.myshop.dto.entity.Order;
 import ru.rakhmanov.myshop.dto.entity.OrderItem;
 import ru.rakhmanov.myshop.repository.OrderItemRepository;
-import ru.rakhmanov.myshop.service.ItemService;
 import ru.rakhmanov.myshop.service.OrderItemService;
 import ru.rakhmanov.myshop.service.OrderService;
 import ru.rakhmanov.myshop.utils.RequestHeaderUtil;
@@ -22,7 +21,6 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     private final OrderItemRepository orderItemRepository;
     private final OrderService orderService;
-    private final ItemService itemService;
 
     @Override
     public Map<Long, Integer> getItemsIdWithCountInCartByIds(List<Long> itemIds) {
@@ -63,11 +61,16 @@ public class OrderItemServiceImpl implements OrderItemService {
             orderItem = optionalOrderItem.get();
             orderItem.setCount(orderItem.getCount() + 1);
         } else {
-            Item item = itemService.getItemById(itemId);
+            Item item = new Item(itemId);
             orderItem = new OrderItem(order, item);
         }
 
         orderItemRepository.save(orderItem);
+    }
+
+    @Override
+    public List<OrderItem> getOrderItemByUserId(Long userId) {
+        return orderItemRepository.getOrderItemByUserId(userId);
     }
 
     private void decrementItemCountInOrder(Long itemId, Order order) {

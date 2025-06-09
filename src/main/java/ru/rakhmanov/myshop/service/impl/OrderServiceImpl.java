@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.rakhmanov.myshop.dto.entity.Order;
 import ru.rakhmanov.myshop.repository.OrderRepository;
 import ru.rakhmanov.myshop.service.OrderService;
+import ru.rakhmanov.myshop.utils.RequestHeaderUtil;
 
 import java.util.Optional;
 
@@ -26,5 +27,13 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return optionalOrder.get();
+    }
+
+    @Override
+    public Optional<Long> getCurrentOrderId() {
+        Long clientId = RequestHeaderUtil.getClientId();
+
+        return orderRepository.findOrderByUserIdAndIsPaidFalse(clientId)
+                .map(Order::getId);
     }
 }

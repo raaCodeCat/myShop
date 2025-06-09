@@ -1,6 +1,8 @@
 package ru.rakhmanov.myshop.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import ru.rakhmanov.myshop.dto.entity.OrderItem;
 
 import java.util.List;
@@ -13,5 +15,14 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     Optional<OrderItem> getOrderItemByOrderIdAndItemId(Long orderId, Long itemId);
 
     List<OrderItem> getOrderItemByOrderId(Long orderId);
+
+    @Query("select oi " +
+            "from OrderItem oi " +
+            "inner join oi.order o " +
+            "inner join fetch oi.item i " +
+            "where " +
+            "o.userId = :userId " +
+            "and o.isPaid = false ")
+    List<OrderItem> getOrderItemByUserId(@Param("userId") Long userId);
 
 }

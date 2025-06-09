@@ -13,4 +13,6 @@ public interface OrderItemService {
 
     List<OrderItem> getOrderItemsByOrderId(Long orderId);
 
+    List<OrderItem> getOrderItemByUserId(Long userId);
+
 }

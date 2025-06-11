@@ -60,7 +60,11 @@ public class ItemServiceImpl implements ItemService {
                 .filter(oi -> itemId.equals(oi.getItem().getId()))
                 .findFirst()
                 .map(OrderItem::getItem)
-                .orElse(getItemById(itemId));
+                .orElse(null);
+
+        if (item == null) {
+            item = getItemById(itemId);
+        }
 
         Integer count = orderItems.stream()
                 .filter(oi -> itemId.equals(oi.getItem().getId()))

@@ -1,42 +1,31 @@
 package ru.rakhmanov.myshop.dto.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.math.BigDecimal;
 
 @Data
-@Entity
-@Table(name = "items")
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Table("items")
 public class Item {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false, length = 50)
+    @Column("name")
     private String name;
 
-    @Column(name = "description", nullable = false, length = 1024)
+    @Column("description")
     private String description;
 
-    @Column(name = "price", nullable = false, precision = 10, scale = 2)
+    @Column("price")
     private BigDecimal price;
 
-    @Column(name = "image_path", nullable = false, length = 100)
+    @Column("image_path")
     private String imagePath;
-
-    public Item(Long id) {
-        this.id = id;
-    }
-
 }

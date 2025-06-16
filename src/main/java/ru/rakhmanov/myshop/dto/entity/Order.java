@@ -1,35 +1,23 @@
 package ru.rakhmanov.myshop.dto.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
 @Data
-@Entity
-@Table(name = "orders")
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Table("orders")
 public class Order {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id", nullable = false)
+    @Column("user_id")
     private Long userId;
 
-    @Column(name = "is_paid")
+    @Column("is_paid")
     private Boolean isPaid;
-
-    public Order (Long userId) {
-        this.userId = userId;
-        this.isPaid = false;
-    }
-
 }

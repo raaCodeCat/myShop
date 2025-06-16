@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.rakhmanov.myshop.exeption.NotFoundException;
 
 @ControllerAdvice
-public class ErrorHandler {
+public class CustomExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public String handleNotFoundException(NotFoundException ex, Model model) {
         model.addAttribute("message", ex.getMessage());

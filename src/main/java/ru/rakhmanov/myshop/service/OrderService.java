@@ -1,5 +1,6 @@
 package ru.rakhmanov.myshop.service;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.rakhmanov.myshop.dto.response.OrderDto;
 
@@ -19,5 +20,7 @@ public interface OrderService {
 //    List<OrderDto> getOrdersByClient();
 
     Mono<OrderDto> getOrderById(Long orderId);
+
+    Flux<OrderDto> getOrdersByUserId();
 
 }

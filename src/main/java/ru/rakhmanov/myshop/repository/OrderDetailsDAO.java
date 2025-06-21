@@ -16,6 +16,4 @@ public interface OrderDetailsDAO {
 
     Mono<BigDecimal> getOrderTotalSum(Long orderId);
 
-
-
 }

@@ -1,10 +1,10 @@
 package ru.rakhmanov.myshop.repository.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.data.relational.core.query.Query;
-import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -29,7 +29,11 @@ public class OrderDetailsDAOImpl implements OrderDetailsDAO {
 
     @Override
     public Flux<OrderDetails> getAllOrdersByUserId(Long userId) {
-        return null;
+        return template.select(OrderDetails.class)
+                .from("order_details")
+                .matching(Query.query(Criteria.where("user_id").is(userId))
+                        .sort(Sort.by("order_id").ascending()))
+                .all();
     }
 
     @Override

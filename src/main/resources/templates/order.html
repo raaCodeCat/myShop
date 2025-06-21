@@ -27,7 +27,7 @@
             <table>
                 <tr>
                     <td>
-                        <a th:href="${'/items/'+item.getId}">
+                        <a th:href="${'/items/'+item.getItemId}">
                             <img width="300" height="300" th:src="${'http://localhost:8090/'+item.getImagePath}">
                         </a>
                     </td>
@@ -40,7 +40,7 @@
                         <b th:text="${item.getCount}+' шт.'"></b>
                     </td>
                     <td>
-                        <b th:text="${item.getPrice*item.getCount}+' руб.'"></b>
+                        <b th:text="${item.getTotal}+' руб.'"></b>
                     </td>
                 </tr>
             </table>

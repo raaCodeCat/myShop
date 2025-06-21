@@ -1,4 +1,4 @@
-package ru.rakhmanov.myshop.dto.entity;
+package ru.rakhmanov.myshop.dto.db.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

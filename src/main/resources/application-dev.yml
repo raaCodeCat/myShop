@@ -11,7 +11,10 @@ spring:
       max-life-time: 10m
       validation-query: SELECT 1
   liquibase:
-    enabled: false
+    enabled: true
+    url: ${LIQUIBASE_DATASOURCE_URL:jdbc:postgresql://localhost:5432/myshopdb}
+    user: ${spring.r2dbc.username}
+    password: ${spring.r2dbc.password}
 
 logging:
   level:

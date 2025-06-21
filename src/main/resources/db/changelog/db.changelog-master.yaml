@@ -3,3 +3,7 @@ databaseChangeLog:
       file: db/changelog/scripts/20250603_0001_init.sql
   - include:
       file: db/changelog/scripts/20250608_0002_insert_items.sql
+  - include:
+      file: db/changelog/scripts/20250616_0003_create_order_details_view.sql
+  - include:
+      file: db/changelog/scripts/20250621_0004_replace_order_details_view.sql

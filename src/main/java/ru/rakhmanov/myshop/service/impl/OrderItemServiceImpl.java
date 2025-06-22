@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import ru.rakhmanov.myshop.dto.db.entity.OrderItem;
-import ru.rakhmanov.myshop.repository.ItemRepository;
 import ru.rakhmanov.myshop.repository.OrderItemRepository;
 import ru.rakhmanov.myshop.service.OrderItemService;
 import ru.rakhmanov.myshop.service.OrderService;
@@ -38,6 +37,13 @@ public class OrderItemServiceImpl implements OrderItemService {
                         }
                     }
                 });
+    }
+
+    @Override
+    public Mono<Integer> getCountForItemInOrder(Long itemId, Long orderId) {
+        return orderItemRepository.findByOrderIdAndItemId(orderId, itemId)
+                .map(OrderItem::getCount)
+                .defaultIfEmpty(0);
     }
 
     private Mono<Void> incrementItemCountInOrder(Long itemId, Long orderId) {

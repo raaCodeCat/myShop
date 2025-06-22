@@ -77,4 +77,12 @@ public class OrderServiceImpl implements OrderService {
         return getCurrentOrderByClientId(clientId)
                 .flatMap(order -> getOrderById(order.getId()));
     }
+
+    @Override
+    public Mono<Long> getCurrentOrderId() {
+        Long clientId = RequestHeaderUtil.getClientId();
+
+        return getCurrentOrderByClientId(clientId)
+                .map(Order::getId);
+    }
 }

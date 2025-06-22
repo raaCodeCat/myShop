@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.reactive.result.view.Rendering;
 import reactor.core.publisher.Mono;
+import ru.rakhmanov.myshop.dto.db.view.OrderDetails;
+import ru.rakhmanov.myshop.dto.response.OrderDto;
 import ru.rakhmanov.myshop.service.OrderService;
 
 @Controller
@@ -23,11 +25,18 @@ public class OrderController {
             @PathVariable(name = "id") Long orderId,
             @RequestParam(name = "newOrder", defaultValue = "false") Boolean newOrder
     ) {
-        return orderService.getOrderById(orderId)
-                .map(orderDetails -> Rendering.view("order")
-                        .modelAttribute("order", orderDetails)
-                        .modelAttribute("newOrder", newOrder)
-                        .build());
+
+        Mono<OrderDto> orderMono = orderService.getOrderById(orderId);
+
+        if (newOrder) {
+            return orderMono
+                    .flatMap(orderDetails -> orderService.buyOrder(orderId)
+                            .then(orderMono)
+                            .map(order -> createRendering(order, true)));
+        }
+
+        return orderMono
+                .map(order -> createRendering(order, false));
     }
 
     @GetMapping()
@@ -38,6 +47,13 @@ public class OrderController {
                     model.addAttribute("orders", orders);
                     return Mono.just("orders");
                 });
+    }
+
+    private Rendering createRendering(OrderDto order, Boolean newOrder) {
+        return Rendering.view("order")
+                .modelAttribute("order", order)
+                .modelAttribute("newOrder", newOrder)
+                .build();
     }
 
 }

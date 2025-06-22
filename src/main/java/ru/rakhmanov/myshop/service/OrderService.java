@@ -17,4 +17,6 @@ public interface OrderService {
 
     Mono<Long> getCurrentOrderId();
 
+    Mono<Void> buyOrder(Long orderId);
+
 }

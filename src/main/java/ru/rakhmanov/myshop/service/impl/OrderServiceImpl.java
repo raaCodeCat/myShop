@@ -85,4 +85,15 @@ public class OrderServiceImpl implements OrderService {
         return getCurrentOrderByClientId(clientId)
                 .map(Order::getId);
     }
+
+    @Override
+    public Mono<Void> buyOrder(Long orderId) {
+        return orderRepository.findById(orderId)
+                .switchIfEmpty(Mono.error(new NotFoundException("Заказ не найден")))
+                .flatMap(order -> {
+                    order.setIsPaid(true);
+                    return orderRepository.save(order);
+                })
+                .then();
+    }
 }

@@ -20,6 +20,15 @@ public class CustomExceptionHandler {
         );
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public Mono<Rendering> handleIllegalArgumentException(IllegalArgumentException ex) {
+        return Mono.just(Rendering.view("error")
+                .modelAttribute("message", ex.getMessage())
+                .status(HttpStatus.BAD_REQUEST)
+                .build()
+        );
+    }
+
     @ExceptionHandler(Exception.class)
     public Mono<Rendering> handleInternalServerError(Exception ex) {
         return Mono.just(

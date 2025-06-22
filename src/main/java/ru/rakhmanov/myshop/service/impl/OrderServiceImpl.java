@@ -69,4 +69,12 @@ public class OrderServiceImpl implements OrderService {
                 .switchIfEmpty(orderRepository.save(new Order(clientId)))
                 .single();
     }
+
+    @Override
+    public Mono<OrderDto> getCart() {
+        Long clientId = RequestHeaderUtil.getClientId();
+
+        return getCurrentOrderByClientId(clientId)
+                .flatMap(order -> getOrderById(order.getId()));
+    }
 }

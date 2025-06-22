@@ -16,4 +16,6 @@ public interface OrderService {
 
     Flux<OrderDto> getOrdersByUserId();
 
+    Mono<OrderDto> getCart();
+
 }

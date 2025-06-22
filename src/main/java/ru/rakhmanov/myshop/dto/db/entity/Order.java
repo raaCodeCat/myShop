@@ -20,4 +20,9 @@ public class Order {
 
     @Column("is_paid")
     private Boolean isPaid;
+
+    public Order(Long userId) {
+        this.userId = userId;
+        this.isPaid = false;
+    }
 }

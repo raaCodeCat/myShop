@@ -4,11 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import ru.rakhmanov.myshop.dto.db.entity.Order;
 import ru.rakhmanov.myshop.dto.db.view.OrderDetails;
 import ru.rakhmanov.myshop.dto.response.OrderDto;
 import ru.rakhmanov.myshop.exeption.NotFoundException;
 import ru.rakhmanov.myshop.mapper.OrderMapper;
 import ru.rakhmanov.myshop.repository.OrderDetailsDAO;
+import ru.rakhmanov.myshop.repository.OrderRepository;
 import ru.rakhmanov.myshop.service.OrderService;
 import ru.rakhmanov.myshop.utils.RequestHeaderUtil;
 
@@ -19,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
+    private final OrderRepository orderRepository;
     private final OrderDetailsDAO orderDetailsDAO;
     private final OrderMapper orderMapper;
 
@@ -58,5 +61,12 @@ public class OrderServiceImpl implements OrderService {
                                 return orderMapper.mapToOrderDto(group.key(), details, total);
                             });
                 });
+    }
+
+    @Override
+    public Mono<Order> getCurrentOrderByClientId(Long clientId) {
+        return orderRepository.findByUserIdAndIsPaidFalse(clientId)
+                .switchIfEmpty(orderRepository.save(new Order(clientId)))
+                .single();
     }
 }

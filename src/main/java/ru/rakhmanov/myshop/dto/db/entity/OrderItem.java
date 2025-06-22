@@ -23,4 +23,10 @@ public class OrderItem {
 
     private Integer count;
 
+    public OrderItem(Long orderId, Long itemId) {
+        this.orderId = orderId;
+        this.itemId = itemId;
+        this.count = 1;
+    }
+
 }
